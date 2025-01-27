@@ -3,6 +3,7 @@ from copy import deepcopy
 import random
 import numpy as np
 import time
+import yaml
 
 class WeatherAug:
     """
@@ -15,7 +16,7 @@ class WeatherAug:
         transforms (List[Callable]): A list of callable data augmentation functions.
         hyp (dict): Hyperparameters for augmentations.
     """
-    def __init__(self, hyp=None,realtime=True):
+    def __init__(self, hyp='cfg/augment_params.yaml',realtime=True):
         """
         Initializes the Cv2Aug class.
 
@@ -35,7 +36,9 @@ class WeatherAug:
                     'jpeg_quality': {50: 50, 70: 30, 90: 20}
                 }
         """
-        self.hyp = hyp or {}
+        if hyp:
+            with open('cfg/augment_params.yaml', 'r') as f:
+                self.hyp = yaml.safe_load(f)
         self.transforms_realtime = [
             self.blur,
             self.median_blur,
@@ -84,59 +87,56 @@ class WeatherAug:
         print(type(param_dict))
         return None
 
-def __call__(self, img):
-    """
-    Applies data augmentation transformations based on realtime flag.
+    def __call__(self, img):
+        """
+        Applies data augmentation transformations based on realtime flag.
 
-    Args:
-        img: Input image to be augmented
+        Args:
+            img: Input image to be augmented
 
-    Returns:
-        tuple: (augmented_image, transform_names)
-    """
-    transform_names = ''
-    
-    # Select transforms based on realtime flag
-    transforms_to_use = self.transforms_realtime if self.isrealtime else self.transforms_prepro
-    
-    # Dictionary mapping transform names to their parameters
-    transform_params = {
-        'denoise': 'denoise_p',
-        'blur': 'blur_p', 
-        'gaussian_blur': 'gaussian_blur_p',
-        'motion_blur': 'motion_blur_p',
-        'median_blur': 'median_blur_p',
-        'jpeg_compression': 'jpeg_quality_p',
-        'wave_transform': 'wave_transform_p',
-        'fourier_noise': 'fourier_noise_p',
-        'salt_pepper_noise': 'salt_pepper_noise_p',
-        'brightness_contrast': 'brightness_contrast_p',
-        'speckle_noise': 'speckle_p',
-        'poisson_noise': 'poisson_p',
-        'bilateral_filter': 'bilateral_p',
-        'radial_blur': 'radial_p',
-        'defocus_blur': 'defocus_p',
-        'anisotropic_diffusion': 'aniso_p',
-        'sharpen': 'sharpen_p',
-        'adaptive_sharpen': 'adaptive_sharpen_p',
-    }
-    
-    # Apply transforms based on selected list
-    for transform in transforms_to_use:
-        transform_name = transform.__name__
-        param = transform_params.get(transform_name)
+        Returns:
+            tuple: (augmented_image, transform_names)
+        """
+        transform_names = ''
         
-        if random.random() < self.hyp.get(param, 0):
-            t0 = time.time()
-            img = transform(img)
-            transform_names += transform_name[0]
-            t1 = time.time()
-            print(f"Time taken for {transform_name}: {t1 - t0:.2f} seconds")
-    
-    # Resize the image to the desired size
-    img = cv2.resize(img, (self.hyp['imgsz'], self.hyp['imgsz']))
-    
-    return img, transform_names
+        # Select transforms based on realtime flag
+        transforms_to_use = self.transforms_realtime if self.isrealtime else self.transforms_prepro
+        
+        # Dictionary mapping transform names to their parameters
+        transform_params = {
+            'denoise': 'denoise_p',
+            'blur': 'blur_p', 
+            'gaussian_blur': 'gaussian_blur_p',
+            'motion_blur': 'motion_blur_p',
+            'median_blur': 'median_blur_p',
+            'jpeg_compression': 'jpeg_quality_p',
+            'wave_transform': 'wave_transform_p',
+            'fourier_noise': 'fourier_noise_p',
+            'salt_pepper_noise': 'salt_pepper_noise_p',
+            'brightness_contrast': 'brightness_contrast_p',
+            'speckle_noise': 'speckle_p',
+            'poisson_noise': 'poisson_p',
+            'bilateral_filter': 'bilateral_p',
+            'radial_blur': 'radial_p',
+            'defocus_blur': 'defocus_p',
+            'anisotropic_diffusion': 'aniso_p',
+            'sharpen': 'sharpen_p',
+            'adaptive_sharpen': 'adaptive_sharpen_p',
+        }
+        
+        # Apply transforms based on selected list
+        for transform in transforms_to_use:
+            transform_name = transform.__name__
+            param = transform_params.get(transform_name)
+            
+            if random.random() < self.hyp.get(param, 0):
+                t0 = time.time()
+                img = transform(img)
+                transform_names += transform_name[0]
+                t1 = time.time()
+                # print(f"Time taken for {transform_name}: {t1 - t0:.2f} seconds")
+        
+        return img, transform_names
 
 
     def blur(self, img):

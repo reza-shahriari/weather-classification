@@ -1,0 +1,57 @@
+# Augmentation settings ------------------------------------------------------------------------------------------------
+
+# name_p: probability of applying the augmentation
+# name_param: if a single number it will be used as the parameter,
+# if a dict it will be used as a probability distribution,
+# if a list with just tow elements it will be used as a range for random.radom()
+
+# Basic blur augmentations
+blur_p: 0.05 #0.5
+blur_k: {3: 50, 5: 30, 7: 20}
+gaussian_blur_p: 0.03 #0.5
+gaussian_blur_k: {3: 50, 5: 30, 7: 20}
+gaussian_blur_sigma: {1: 50, 2: 30, 3: 20}
+median_blur_p: 0.01 #0.5
+median_blur_k: {3: 50, 5: 30, 7: 20}
+motion_blur_p: 0.01 #0.5
+motion_blur_k: [5,15]
+
+# Compression and noise
+jpeg_quality_p: 0.5 #0.5
+jpeg_quality: [25,100]
+fourier_noise_p: 0.0 #0.3
+fourier_strength: [0.1,0.8]
+salt_pepper_noise_p: 0.03 #0.3
+sp_density: [0.003,0.02]
+speckle_p: 0.01 #0.3
+speckle_intensity: {0.1: 50, 0.2: 30, 0.3: 20}
+poisson_p: 0.01 #0.3
+
+# Advanced filters
+bilateral_p: 0.001 # 0.3
+bilateral_d: {9: 50, 15: 30, 21: 20}
+bilateral_sigma_color: {75: 50, 100: 30, 125: 20}
+bilateral_sigma_space: {75: 50, 100: 30, 125: 20}
+radial_p: 0.0 # radial blur is to slow, so we set it to 0.0
+radial_strength: {10: 50, 20: 30, 30: 20}
+defocus_p: 0.003 #0.3
+defocus_size: {3: 50, 5: 30, 7: 20}
+aniso_p: 0.0013 #0.3
+aniso_iter: {5: 50, 3: 30, 15: 20}
+aniso_gamma: {0.15: 50, 0.25: 30, 0.35: 20}
+aniso_kappa: {25: 50, 35: 30, 45: 20}
+
+# Geometric and color transformations
+wave_transform_p: 0.0 #0.2
+wave_amplitude: {3: 50, 5: 25, 2: 25}
+wave_wavelength: {80: 50, 60: 25, 100: 25}
+brightness_contrast_p: 0.01 #0.3 
+contrast: {0.5: 40, 1.5: 40, 2.0: 20, }
+brightness:  {10: 35,-10: 35, 20: 17, 30: 13, }
+WB_Hot_p: 0.0 #0.5
+
+# Sharpening and Denoising
+sharpen_p: 0.03 #0.3
+denoise_p: 0.05 #0.5
+adaptive_sharpen_p: 0.03 #0.3
+filter2D_p: 0.0005 #0.1 not working nicly so a little probability

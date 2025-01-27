@@ -71,9 +71,11 @@ def download_weather_images(search_term, output_dir, num_images=100):
 
 def create_weather_dataset():
     weather_conditions = [
-        'sunny weather landscape',
+        'clear weather landscape',
         'rainy weather landscape',
         'cloudy weather landscape',
+        'shine weather landscape',
+        'sunny weather landscape',
         'snowy weather landscape',
         'foggy weather landscape',
         'stormy weather landscape'
@@ -82,10 +84,11 @@ def create_weather_dataset():
     base_dir = 'dataset'
     os.makedirs(base_dir, exist_ok=True)
     
-    for condition in weather_conditions:
+    for i,condition in enumerate(weather_conditions):
         condition_dir = os.path.join(base_dir, condition.split()[0])
         print(f"\nCollecting images for {condition}...")
-        downloaded = download_weather_images(condition, condition_dir, num_images=100)
+        num_images = 100 if i <5 else 800
+        downloaded = download_weather_images(condition, condition_dir, num_images=num_images)
         print(f"Successfully downloaded {downloaded} images for {condition}")
 
 if __name__ == "__main__":

@@ -87,8 +87,10 @@ class ImageProcessor:
 
         # Create train, val, test directories
         splits = ['train', 'val', 'test']
-        categories = ['cloudy', 'rainy', 'shine', 'sunrise', 'clear', ]
-
+        categories = [os.path.basename(folder) for folder in glob(os.path.join(self.data_dir, '*')) if os.path.isdir(folder)]
+        for s in splits:
+            if s in categories:
+                categories.remove(s)
         for category in categories:
             category_path = os.path.join(self.data_dir, category)
             if os.path.exists(category_path):
@@ -137,8 +139,10 @@ class ImageProcessor:
                 os.rmdir(category_path)
     def reverse_split(self):
         splits = ['train', 'val', 'test']
-        categories = ['cloudy', 'rainy', 'shine', 'sunrise', 'clear', ]
-        
+        categories = [os.path.basename(folder) for folder in glob(os.path.join(self.data_dir, '*')) if os.path.isdir(folder)]
+        for s in splits:
+            if s in categories:
+                categories.remove(s)
         # Create category folders if they don't exist
         for category in categories:
             os.makedirs(os.path.join(self.data_dir, category), exist_ok=True)
@@ -168,5 +172,5 @@ class ImageProcessor:
 
 
 processor = ImageProcessor()
-processor.reverse_split()
+processor.train_val_test_split()
             
